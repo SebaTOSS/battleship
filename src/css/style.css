@@ -284,7 +284,6 @@ header.top h1 .ofThe {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: url("images/anchor.svg") center no-repeat;
   background-size: cover;
   padding: 0 1rem;
 }

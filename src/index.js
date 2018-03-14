@@ -1,17 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
-import StorePicker from './components/StorePicker';
-import App from './components/App';
 import './css/style.css';
 
+import Battleship from './components/Battleship';
+
 ReactDOM.render(
-  <BrowserRouter>
-    <div>
-      <Route exact path='/' component={StorePicker}/>
-      <Route path='/game' component={App}/>
-      <Route path='/end' component={App}/>
-    </div>
-  </BrowserRouter>,
+  <Battleship/>,
   document.querySelector('#main')
 );
