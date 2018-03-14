@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SetUp from './SetUp';
 import Game from './Game';
 import EndGame from './EndGame';
+import Header from './Header';
+import Footer from './Footer';
 
 const renderMergedProps = (component, ...rest) => {
   const finalProps = Object.assign({}, ...rest);
@@ -57,23 +59,25 @@ class BattleShip extends React.Component {
   render() {
     return (
       <div>
+        <Header/>
         <Router>
           <Switch>
             <PropsRoute
               exact path='/'
               component={SetUp}
               setPlayerName={this.setPlayerName}/>
-            <PropsRoute 
+            <PropsRoute
               path='/game'
               component={Game}
               surrender={this.surrender}
               setWinner={this.setWinner}/>
-            <PropsRoute 
+            <PropsRoute
               path='/end'
               component={EndGame}
               winner={this.state.winner}/>
           </Switch>
         </Router>
+        <Footer/>
       </div>
     )
   }
