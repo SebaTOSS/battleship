@@ -9,12 +9,14 @@ class Cell extends Component {
 		this.getClickHandler = this.getClickHandler.bind(this);
 		this.getMouseOverHandler = this.getMouseOverHandler.bind(this);
 		this.getMouseOutHandler = this.getMouseOutHandler.bind(this);
+		this.setBackgroundColor = this.setBackgroundColor.bind(this);
 	}
 
 	getClickHandler(data) {
 		const { onClick } = this.props;
 		if (!onClick) return false;
-		return onClick(data, this);
+		onClick(data, this);
+		this.forceUpdate();
 	}
 
 	getMouseOverHandler(data) {
@@ -29,6 +31,11 @@ class Cell extends Component {
 		return onMouseOut(data);
 	}
 	
+	setBackgroundColor(color) {
+		this.props.style.backgroundColor = color;
+		this.forceUpdate();
+	}
+
 	render() {
 		const {data, style, className} = this.props;
 		return (
