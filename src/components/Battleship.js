@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SetUp from './SetUp';
 import Game from './Game';
 import EndGame from './EndGame';
-import Header from './Header';
-import Footer from './Footer';
 import { buildBot } from '../Bots';
 
 const renderMergedProps = (component, ...rest) => {
@@ -97,8 +95,6 @@ class BattleShip extends React.Component {
 
   render() {
     return (
-      <div>
-        <Header/>
         <Router>
           <Switch>
             <PropsRoute
@@ -121,8 +117,6 @@ class BattleShip extends React.Component {
               winner={this.state.winner}/>
           </Switch>
         </Router>
-        <Footer/>
-      </div>
     )
   }
 }
