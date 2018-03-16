@@ -58,12 +58,12 @@ class Game extends React.Component {
           </ul>
         </div>
         <div>
-          <button 
+          <button
             onClick={this.surrender}
             disabled={this.props.gameOver}>
             Surrender
           </button>
-          <button 
+          <button
             onClick={this.gameOver}
             disabled={!this.props.gameOver}>
             Game Over

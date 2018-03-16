@@ -37,8 +37,8 @@ export function buildBot(type) {
       bot = createRandom();
       break;
   }
-  const ship = new Ship(1);
-  ship.setCenter({x:0, y:0});
+  const ship = new Ship(3);
+  ship.setStartCoordinate({x:0, y:0}, false);
   bot.ships = [];
   bot.ships.push(ship);
   bot.board = canonicalData(10, 10);

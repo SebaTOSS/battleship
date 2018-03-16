@@ -41,6 +41,10 @@ class SetUp extends React.Component {
               <option value='1'>DeepBlue</option>
               <option value='2'>Random</option>
             </select>
+            <select ref={(input) => this.direction = input}>
+              <option value='true'>Horizontal</option>
+              <option value='false'>Vertical</option>
+            </select>
           </p>
           <Matrix 
             data={matrix}

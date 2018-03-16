@@ -69,6 +69,7 @@ class BattleShip extends React.Component {
     const ships = buildShips();
     this.setState({
       events: [],
+      isHorizontal: true,
       ships: ships,
       player: {
         name: '',
@@ -98,10 +99,15 @@ class BattleShip extends React.Component {
     this.setState({player});
   }
 
+  changeDirection() {
+    let isHorizontal = {...this.state.isHorizontal};
+    this.setState({isHorizontal: !isHorizontal});
+  }
+
   placeShip(coordinate, cell) {
     const ship = this.state.ships.pop();
     if (ship) {
-      ship.setCenter(coordinate);
+      ship.setStartCoordinate(coordinate, this.props.isHorizontal);
       this.state.player.ships.push(ship);
       cell.setBackgroundColor("black");
     }
@@ -142,7 +148,7 @@ class BattleShip extends React.Component {
     const ship = findShip(this.state.player.ships, coordinate);
     const botName = this.state.bot.name;
     this.computeShoot(ship, coordinate, botName);
-    const afloatShip = this.getAfloatShip(this.state.bot.ships);
+    const afloatShip = getAfloatShip(this.state.bot.ships);
     if (!afloatShip) {
       const result = 'LOST';
       this.setState({result});
@@ -172,6 +178,7 @@ class BattleShip extends React.Component {
             exact path='/'
             component={SetUp}
             setPlayerName={this.setPlayerName}
+            changeDirection={this.changeDirection}
             placeShip={this.placeShip}
             setBot={this.setBot}/>
           <PropsRoute
