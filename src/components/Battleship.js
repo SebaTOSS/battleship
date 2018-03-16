@@ -74,13 +74,11 @@ class BattleShip extends React.Component {
       player: {
         name: '',
         ships: [],
-        cells:[],
         board: board
       },
       bot: {
         name: '',
         ships: [],
-        cells:[],
         board: []
       },
       result: 'WON',
@@ -116,7 +114,10 @@ class BattleShip extends React.Component {
   nextTurn() {
     const afloatShip = getAfloatShip(this.state.bot.ships);
     if (afloatShip) {
-      this.botShoots();
+      let timer = setTimeout( () => {
+        clearTimeout(timer);
+        this.botShoots();
+      }, 1000);
     } else {
       const result = 'WON';
       this.setState({result});
@@ -125,19 +126,24 @@ class BattleShip extends React.Component {
   }
 
   computeShoot(ship, coordinate, playerName) {
-    let event;
+    let event = {
+      timestamp: Date.now()
+    };
     if (ship) {
       ship.hit(coordinate);
       if (ship.isSunk()) {
-        event = `${playerName} - SHIP DESTROYED!`;
+        event.message = `${playerName} - SHIP DESTROYED!`;
+        event.class = 'destroy';
       } else {
-        event = `${playerName} - HIT!`;
+        event.message = `${playerName} - HIT!`;
+        event.class = 'hit';
       }
     } else {
-      event = `${playerName} - MISSED!`;
+      event.message = `${playerName} - MISSED!`;
+      event.class = 'missed';
     }
     console.log(event);
-    const events = this.state.events;
+    const events = this.state.events.slice();
     events.push(event);
     this.setState({events});
   }

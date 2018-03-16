@@ -25,10 +25,14 @@ class Game extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ events: nextProps.events });
+  }
+
   renderEvent(event) {
     return (
-      <li>
-        {event}
+      <li key={event.timestamp} className={event.class}>
+        {event.message}
       </li>
     )
   }
@@ -54,7 +58,7 @@ class Game extends React.Component {
         <div>
           <h3>Shoots</h3>
           <ul>
-            {events.forEach(this.renderEvent)}
+            {events.map(this.renderEvent)}
           </ul>
         </div>
         <div>
