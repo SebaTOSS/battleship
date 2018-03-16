@@ -25,10 +25,6 @@ class Game extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ events: nextProps.events });
-  }
-
   renderEvent(event) {
     return (
       <li key={event.timestamp} className={event.class}>
@@ -38,7 +34,6 @@ class Game extends React.Component {
   }
 
   render() {
-    const events = this.props.events;
     return (
       <div>
         <h2>Game running</h2>
@@ -58,20 +53,22 @@ class Game extends React.Component {
         <div>
           <h3>Shoots</h3>
           <ul>
-            {events.map(this.renderEvent)}
+            {this.props.events.map(this.renderEvent)}
           </ul>
         </div>
         <div>
-          <button
-            onClick={this.surrender}
-            disabled={this.props.gameOver}>
-            Surrender
-          </button>
-          <button
-            onClick={this.gameOver}
-            disabled={!this.props.gameOver}>
-            Game Over
-          </button>
+          <p>
+            <button
+              onClick={this.surrender}
+              disabled={this.props.gameOver}>
+              Surrender
+            </button>
+            <button
+              onClick={this.gameOver}
+              disabled={!this.props.gameOver}>
+              Game Over
+            </button>
+          </p>
         </div>
       </div>
     )

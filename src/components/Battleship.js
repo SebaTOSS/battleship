@@ -120,8 +120,8 @@ class BattleShip extends React.Component {
       }, 1000);
     } else {
       const result = 'WON';
-      this.setState({result});
-      this.setState({gameOver: true});
+      const gameOver = true;
+      this.setState({result, gameOver});
     }
   }
 
@@ -157,8 +157,8 @@ class BattleShip extends React.Component {
     const afloatShip = getAfloatShip(this.state.bot.ships);
     if (!afloatShip) {
       const result = 'LOST';
-      this.setState({result});
-      this.setState({gameOver: true});
+      const gameOver = true;
+      this.setState({result, gameOver});
     }
   }
 
