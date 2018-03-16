@@ -9,13 +9,13 @@ export default class Ship {
     this.coordinates = [this.startCoordinate];
     if (isHorizontal) {
       for (let i = 1; i <= this.size; i++) {
-        let x = coordinate.x + 1;
+        let x = coordinate.x + i;
         let newCoordinate = { x: x, y: coordinate.y };
         this.coordinates.push(newCoordinate);
       }
     } else {
       for (let i = 1; i <= this.size; i++) {
-        let y = coordinate.y + 1;
+        let y = coordinate.y + i;
         let newCoordinate = { x: coordinate.x, y: y };
         this.coordinates.push(newCoordinate);
       }
