@@ -4,6 +4,8 @@ import SetUp from './SetUp';
 import Game from './Game';
 import EndGame from './EndGame';
 import { buildBot } from '../Bots';
+import Ship from '../Ship';
+import { canonicalData } from './Util';
 
 const renderMergedProps = (component, ...rest) => {
   const finalProps = Object.assign({}, ...rest);
@@ -20,28 +22,69 @@ const PropsRoute = ({ component, ...rest }) => {
   );
 }
 
+const buildShips = function buildShips() {
+  const ships = [];
+  let ship;
+  ships.push(new Ship(2));
+  for (let index = 0; index < 3; index++) {
+    ship = new Ship(3);
+    ships.push(ship);
+  }
+  ships.push(new Ship(4));
+  return ships;
+}
+
+const getAfloatShip = function getAfloatShip(collection) {
+  return collection.find(
+    (ship) => !ship.isSunk()
+  );
+}
+
+const findShip = function findShip(collection, coordinate) {
+  return collection.find(
+    (ship) => ship.isInCoordinate(coordinate)
+  );
+}
+
 class BattleShip extends React.Component {
   constructor() {
     super();
     this.setPlayerName = this.setPlayerName.bind(this);
     this.surrender = this.surrender.bind(this);
-    this.setWinner = this.setWinner.bind(this);
     this.placeShip = this.placeShip.bind(this);
     this.playerShoots = this.playerShoots.bind(this);
+    this.botShoots = this.botShoots.bind(this);
     this.setBot = this.setBot.bind(this);
-    // TODO change the board to the user
-    const playerBoard = [ [{x:0, y:0, ship: true}, {x:0, y:1}], [{x:1, y:0}, {x:1, y:1}] ];
-    this.state = {
+    this.nextTurn = this.nextTurn.bind(this);
+    this.setInitialState = this.setInitialState.bind(this);
+    this.computeShoot = this.computeShoot.bind(this);
+  }
+  
+  componentWillMount() {
+    this.setInitialState();
+  }
+
+  setInitialState() {
+    const board = canonicalData(10, 10);
+    const ships = buildShips();
+    this.setState({
+      events: [],
+      ships: ships,
       player: {
         name: '',
-        remainingShips: 1,
-        board: playerBoard
+        ships: [],
+        cells:[],
+        board: board
       },
       bot: {
-        remainingShips: 1
+        name: '',
+        ships: [],
+        cells:[],
+        board: []
       },
-      winner: 'PC'
-    }
+      result: 'WON',
+      gameOver: false
+    });
   }
 
   setBot(number) {
@@ -55,68 +98,98 @@ class BattleShip extends React.Component {
     this.setState({player});
   }
 
-  placeShip(data, cell) {
-    console.log(data);
-    data.ship = true;
-    cell.setBackgroundColor("black");
+  placeShip(coordinate, cell) {
+    const ship = this.state.ships.pop();
+    if (ship) {
+      ship.setCenter(coordinate);
+      this.state.player.ships.push(ship);
+      cell.setBackgroundColor("black");
+    }
   }
 
-  playerShoots(data, cell) {
-    console.log(data);
-    let output, hit;
-    if (data.ship) {
-      hit = true;
-      output = 'Player HIT!';
-      cell.setBackgroundColor("red");
+  nextTurn() {
+    const afloatShip = getAfloatShip(this.state.bot.ships);
+    if (afloatShip) {
+      this.botShoots();
     } else {
-      hit = false;
-      output = 'Player MISSED!';
-      cell.setBackgroundColor("lightblue");
+      const result = 'WON';
+      this.setState({result});
+      this.setState({gameOver: true});
     }
-    console.log(output);
-    if (hit) {
-      const bot = this.state.bot;
-      bot.remainingShips = bot.remainingShips - 1;
+  }
+
+  computeShoot(ship, coordinate, playerName) {
+    let event;
+    if (ship) {
+      ship.hit(coordinate);
+      if (ship.isSunk()) {
+        event = `${playerName} - SHIP DESTROYED!`;
+      } else {
+        event = `${playerName} - HIT!`;
+      }
     } else {
-      const position = this.state.bot.shoots(this.state.player.board);
-      console.log(position);
+      event = `${playerName} - MISSED!`;
+    }
+    console.log(event);
+    const events = this.state.events;
+    events.push(event);
+    this.setState({events});
+  }
+
+  botShoots() {
+    const coordinate = this.state.bot.getCoordinateForShoot();
+    console.log(coordinate);
+    const ship = findShip(this.state.player.ships, coordinate);
+    const botName = this.state.bot.name;
+    this.computeShoot(ship, coordinate, botName);
+    const afloatShip = this.getAfloatShip(this.state.bot.ships);
+    if (!afloatShip) {
+      const result = 'LOST';
+      this.setState({result});
+      this.setState({gameOver: true});
+    }
+  }
+
+  playerShoots(coordinate) {
+    if (!this.state.gameOver) {
+      const ship = findShip(this.state.bot.ships, coordinate);
+      const playerName = this.state.player.name;
+      this.computeShoot(ship, coordinate, playerName);
+      this.nextTurn();
     }
   }
 
   surrender() {
-    const winner = 'SURRENDERED';
-    this.setState({winner});
-  }
-
-  setWinner(isPlayer) {
-    const winner = (isPlayer)? this.state.player.name : 'PC';
-    this.setState({winner});
+    const result = 'SURRENDERED';
+    this.setState({result});
   }
 
   render() {
     return (
-        <Router>
-          <Switch>
-            <PropsRoute
-              exact path='/'
-              component={SetUp}
-              setPlayerName={this.setPlayerName}
-              placeShip={this.placeShip}
-              setBot={this.setBot}/>
-            <PropsRoute
-              path='/game'
-              component={Game}
-              playerBoard={this.state.player.board}
-              botBoard={this.state.bot.board}
-              surrender={this.surrender}
-              setWinner={this.setWinner}
-              playerShoots={this.playerShoots}/>
-            <PropsRoute
-              path='/end'
-              component={EndGame}
-              winner={this.state.winner}/>
-          </Switch>
-        </Router>
+      <Router>
+        <Switch>
+          <PropsRoute
+            exact path='/'
+            component={SetUp}
+            setPlayerName={this.setPlayerName}
+            placeShip={this.placeShip}
+            setBot={this.setBot}/>
+          <PropsRoute
+            path='/game'
+            component={Game}
+            gameOver={this.state.gameOver}
+            events={this.state.events}
+            playerBoard={this.state.player.board}
+            botBoard={this.state.bot.board}
+            surrender={this.surrender}
+            playerShoots={this.playerShoots}/>
+          <PropsRoute
+            path='/end'
+            component={EndGame}
+            restart={this.setInitialState}
+            result={this.state.result}/>
+        </Switch>
+      </Router>
     )
   }
 }

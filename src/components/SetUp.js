@@ -39,8 +39,7 @@ class SetUp extends React.Component {
               ref={(input)=> this.playerName = input}/>
              <select ref={(input) => this.selectedBot = input}>
               <option value='1'>DeepBlue</option>
-              <option value='2'>AlphaGo</option>
-              <option value='' default>Random</option>
+              <option value='2'>Random</option>
             </select>
           </p>
           <Matrix 

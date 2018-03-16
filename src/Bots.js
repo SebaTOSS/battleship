@@ -1,19 +1,13 @@
+import Ship from './Ship';
+import { canonicalData, linearCanonicalCoordinates } from './components/Util';
+
 export function createAlphaGo() {
   return {
-    name: 'AlphaGo',
-    shoots: function() {
-      console.log('Shoots AlphaGo');
-      return {x: 1, y:1};
-    }
-  };
-}
-
-export function createDeepBlue() {
-  return {
     name: 'DeepBlue',
-    shoots: function() {
-      console.log('Shoots DeepBlue');
-      return {x: 1, y:1};
+    cells: linearCanonicalCoordinates(10, 10),
+    getCoordinateForShoot: function() {
+      const coordinate = this.cells.pop();
+      return coordinate;
     }
   };
 }
@@ -21,9 +15,11 @@ export function createDeepBlue() {
 export function createRandom() {
   return {
     name: 'Random',
-    shoots: function(board) {
-      console.log('Shoots Random');
-      return {x: 1, y:1};
+    getCoordinateForShoot: function(board) {
+      return {
+        x: Math.floor(Math.random() * 10),
+        y: Math.floor(Math.random() * 10)
+      };
     }
   };
 }
@@ -35,13 +31,16 @@ export function buildBot(type) {
       bot = createAlphaGo();
       break;
     case '2':
-      bot = createDeepBlue();
+      bot = createRandom();
       break;
     default:
       bot = createRandom();
       break;
   }
-  bot.board = [ [{x:0, y:0}, {x:0, y:1}], [{x:1, y:0}, {x:1, y:1, ship: true}] ];
-  bot.remainingShips = 1;
+  const ship = new Ship(1);
+  ship.setCenter({x:0, y:0});
+  bot.ships = [];
+  bot.ships.push(ship);
+  bot.board = canonicalData(10, 10);
   return bot;
 }
