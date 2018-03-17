@@ -14,11 +14,20 @@ class EndGame extends React.Component {
 
   render() {
     const result = this.props.result;
+    const background = (result === 'WON')? '/css/images/won.jpg' : '/css/images/defeat.jpg';
+    const style = {
+      backgroundImage: `url(${background})`,
+    };
     return (
-      <div className='w3-center'>
+      <div className='w3-center'
+        style= {style}>
         <h2>Game over</h2>
         <h3>{result}</h3>
-        <button onClick={this.restart} className='w3-button w3-theme'>Restart</button>
+        <button 
+          className='w3-button w3-theme'
+          onClick={this.restart}>
+          Restart
+        </button>
       </div>
     )
   }
