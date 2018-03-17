@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import SetUp from './SetUp';
-import Game from './Game';
+import Playing from './Playing';
 import EndGame from './EndGame';
 import { buildBot } from '../Bots';
 import { canonicalData, PropsRoute, buildShips } from './Util';
@@ -104,7 +104,7 @@ class BattleShip extends React.Component {
     const event = {
       timestamp: Date.now(),
       message: `${playerName} - MISSED!`,
-      class: 'ship-missed',
+      class: 'water',
     };
     if (ship) {
       ship.hit(cellData);
@@ -170,8 +170,8 @@ class BattleShip extends React.Component {
             setBot={this.setBot}
             playerBoard={this.state.player.board}/>
           <PropsRoute
-            path='/game'
-            component={Game}
+            path='/playing'
+            component={Playing}
             gameOver={this.state.gameOver}
             events={this.state.events}
             playerBoard={this.state.player.board}
