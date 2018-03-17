@@ -92,7 +92,7 @@ class BattleShip extends React.Component {
       let timer = setTimeout( () => {
         clearTimeout(timer);
         this.botShoots();
-      }, 1000);
+      }, 500);
     } else {
       const result = 'WON';
       const gameOver = true;
@@ -101,26 +101,22 @@ class BattleShip extends React.Component {
   }
 
   computeShoot(ship, cellData, playerName) {
-    let event = {
-      timestamp: Date.now()
+    const event = {
+      timestamp: Date.now(),
+      message: `${playerName} - MISSED!`,
+      class: 'ship-missed',
     };
     if (ship) {
       ship.hit(cellData);
       if (ship.isSunk()) {
         event.message = `${playerName} - SHIP DESTROYED!`;
-        event.class = 'destroy';
-        cellData.className = 'ship-destroy';
+        event.class = 'ship-destroy';
       } else {
         event.message = `${playerName} - HIT!`;
-        event.class = 'hit';
-        cellData.className = 'ship-hit';
+        event.class = 'ship-hit';
       }
-    } else {
-      event.message = `${playerName} - MISSED!`;
-      event.class = 'missed';
-      cellData.className = 'ship-missed';
     }
-    console.log(event);
+    cellData.className = event.class;
     const events = this.state.events.slice();
     events.push(event);
     this.setState({events});

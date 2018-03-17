@@ -1,23 +1,17 @@
-.hit {
-  color: red;
-}
-.destroy {
-  color: orange;
-}
-.missed {
-  color: lightblue;
-}
 .ship {
   background-color: black !important;
+  color: red;
 }
 .ship-hit {
   background-color: red !important;
 }
 .ship-destroy {
   background-color: orange !important;
+  color: orange;
 }
 .ship-missed {
   background-color: lightblue !important;
+  color: lightblue;
 }
 .order-enter {
   -webkit-transform: translateX(-120%);
