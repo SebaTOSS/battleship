@@ -47,7 +47,7 @@ class SetUp extends React.Component {
           <Matrix 
             data={this.props.playerBoard}
             setStyle={this.getStyle}
-            onClick={this.props.placeShip}/>
+            onClick={this.props.placePiece}/>
           <button type='submit'>Start game!</button>
         </form>
       </div>

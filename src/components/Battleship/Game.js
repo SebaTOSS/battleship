@@ -2,11 +2,11 @@ import { canonicalData } from './Util';
 import Ship from './Ship';
 import { createAlphaGo, createRandom } from './Bots';
 
-export function createBoard() {
+function createBoard() {
   return canonicalData(10, 10);
 }
 
-export function buildShips() {
+function buildShips() {
   const ships = [];
   let ship;
   ships.push(new Ship(2));
@@ -18,7 +18,7 @@ export function buildShips() {
   return ships;
 }
 
-export function buildBot(type) {
+function buildBot(type) {
   let bot;
   switch (type) {
     case '1':
@@ -39,45 +39,40 @@ export function buildBot(type) {
   return bot;
 }
 
-export function playerShoots(ships, cell, name) {
-  const ship = findShip(ships, cell);
-  return computeShoot(ship, cell, name);
-}
-
-export function wonPlayer(ships) {
+function wonPlayer(ships) {
   const afloatShip = getAfloatShip(ships);
-  let result, gameOver;
+  let result, isGameOver;
   if (afloatShip) {
     result = '';
-    gameOver = false;
+    isGameOver = false;
   } else {
     result = 'WON';
-    gameOver = true;
+    isGameOver = true;
   }
-  return { result, gameOver };
+  return { result, isGameOver };
 }
 
-export function wonBot(ships) {
+function wonBot(ships) {
   const afloatShip = getAfloatShip(ships);
-  let result, gameOver;
+  let result, isGameOver;
   if (afloatShip) {
     result = '';
-    gameOver = false;
+    isGameOver = false;
   } else {
     result = 'LOST';
-    gameOver = true;
+    isGameOver = true;
   }
-  return { result, gameOver };
+  return { result, isGameOver };
 }
 
-export function computeShoot(ship, cellData, playerName) {
+function computeShoot(ship, cell, playerName) {
   const event = {
     timestamp: Date.now(),
     message: `${playerName} - MISSED!`,
     class: 'water',
   };
   if (ship) {
-    ship.hit(cellData);
+    ship.hit(cell);
     if (ship.isSunk()) {
       event.message = `${playerName} - SHIP DESTROYED!`;
       event.class = 'ship-destroy';
@@ -86,11 +81,11 @@ export function computeShoot(ship, cellData, playerName) {
       event.class = 'ship-hit';
     }
   }
-  cellData.className = event.class;
+  cell.className = event.class;
   return event;
 }
 
-export function botShoots(parameters) {
+function botShoots(parameters) {
   const coordinate = parameters.bot.getCoordinateForShoot();
   const ship = findShip(parameters.ships, coordinate);
   const flatBoard = parameters.board.reduce(
@@ -114,4 +109,85 @@ const findShip = function findShip(collection, coordinate) {
   return collection.find(
     (ship) => ship.isInCoordinate(coordinate)
   );
+}
+
+export default class Battleship {
+  constructor() {
+    const board = createBoard();
+    this.ships = buildShips();
+    this.events = [];
+    this.player = {
+      name: '',
+      ships: [],
+      board: board
+    };
+    this.bot = {
+      name: '',
+      ships: [],
+      board: []
+    };
+    this.result = 'WON';
+    this.isGameOver = false;
+  }
+  
+  createBoard() {
+    return this.player.board;
+  }
+
+  getPieces() {
+    return this.ships;
+  }
+
+  surrender() {
+    this.result = 'SURRENDERED';
+  }
+
+  placePiece(cell, direction) {
+    const ship = this.ships.pop();
+    if (ship) {
+      ship.setStartCoordinate(cell, direction);
+      const player = {...this.player}
+      player.ships.push(ship);
+      cell.className = 'ship';
+    }
+  }
+
+  setBot(number) {
+    this.bot = buildBot(number);
+  }
+
+  setPlayerName(name) {
+    this.player.name = name;
+  }
+
+  playerShoots(cell) {
+    const ship = findShip(this.bot.ships, cell);
+    const event = computeShoot(ship, cell, this.player.name);
+    this.events.push(event);
+  }
+
+  botShoots() {
+    const parameters = {
+      bot: this.bot,
+      ships: this.player.ships,
+      board: this.player.board,
+      name: this.bot.name
+    }
+    const event = botShoots(parameters);
+    this.events.push(event);
+  }
+
+  playsPlayer(cell) {
+    this.playerShoots(cell);
+    const { result, isGameOver } = wonPlayer(this.bot.ships);
+    this.result = result;
+    this.isGameOver = isGameOver;
+  }
+
+  playsBot() {
+    this.botShoots();
+    const { result, isGameOver } = wonBot(this.player.ships);
+    this.result = result;
+    this.isGameOver = isGameOver;
+  }
 }

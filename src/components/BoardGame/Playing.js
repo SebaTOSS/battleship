@@ -44,12 +44,12 @@ class Playing extends React.Component {
         <p>
           <button
             onClick={this.surrender}
-            disabled={this.props.gameOver}>
+            disabled={this.props.isGameOver}>
             Surrender
           </button>
           <button
             onClick={this.gameOver}
-            disabled={!this.props.gameOver}>
+            disabled={!this.props.isGameOver}>
             Game Over
           </button>
         </p>
