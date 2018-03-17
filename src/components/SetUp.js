@@ -13,7 +13,7 @@ class SetUp extends React.Component {
     this.props.setPlayerName(this.playerName.value);
     this.props.setBot(this.selectedBot.value);
     this.playerForm.reset();
-    this.props.history.push(`/game`);
+    this.props.history.push(`/playing`);
   }
 
   getStyle() {

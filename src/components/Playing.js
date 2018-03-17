@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom'
 import Matrix from './board/Matrix';
 
-class Game extends React.Component {
+class Playing extends React.Component {
   constructor() {
     super();
     this.surrender = this.surrender.bind(this);
@@ -93,8 +93,8 @@ class Game extends React.Component {
 
   render() {
     return (
-      <div className='game'>
-        <h2>Game running</h2>
+      <div className='playing'>
+        <h2>Playing</h2>
         {this.renderPlayerBoard()}
         {this.renderBotBoard()}
         {this.renderEvents()}
@@ -104,4 +104,4 @@ class Game extends React.Component {
   }
 }
 
-export default withRouter(Game);
+export default withRouter(Playing);

@@ -32,9 +32,9 @@ export default class Ship {
 
   hit(coordinate) {
     const target = this.coordinates.find((shipCoordinate) => {
-      return shipCoordinate.x === coordinate.x &&
-       shipCoordinate.y === coordinate.y;
-     });
+      return  shipCoordinate.x === coordinate.x &&
+              shipCoordinate.y === coordinate.y;
+    });
     if (!target.hit) {
       target.hit = true;
       this.hits = this.hits + 1;
