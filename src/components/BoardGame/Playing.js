@@ -32,7 +32,7 @@ class Playing extends React.Component {
   renderEvent(event) {
     return (
       <li key={event.timestamp}
-          className={event.class}>
+          className={ 'event ' + event.class}>
         {event.message}
       </li>
     )
@@ -40,16 +40,18 @@ class Playing extends React.Component {
 
   renderButtons() {
     return (
-      <div className='buttons-container'>
+      <div className='w3-card w3-container'>
         <p>
           <button
             onClick={this.surrender}
-            disabled={this.props.isGameOver}>
+            disabled={this.props.isGameOver}
+            className='w3-button w3-theme'>
             Surrender
           </button>
           <button
             onClick={this.gameOver}
-            disabled={!this.props.isGameOver}>
+            disabled={!this.props.isGameOver}
+            className='w3-button w3-theme'>
             Game Over
           </button>
         </p>
@@ -59,42 +61,51 @@ class Playing extends React.Component {
 
   renderEvents() {
     return (
-      <div>
-        <h3>Shoots</h3>
-        <ul>
-          {this.props.events.map(this.renderEvent)}
-        </ul>
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>Shoots</h3>
+          <ul className='w3-ul w3-margin-bottom'>
+            {this.props.events.map(this.renderEvent)}
+          </ul>
+        </div>
       </div>
     );
   }
 
   renderBotBoard() {
     return (
-      <div>
-        <h3>Enemy Ships</h3>
-        <Matrix 
-          data={this.props.botBoard}
-          setStyle={this.getStyle}
-          onClick={this.props.playsPlayer}/>
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>Enemy Ships</h3>
+          <Matrix 
+            data={this.props.botBoard}
+            setStyle={this.getStyle}
+            onClick={this.props.playsPlayer}/>
+        </div>
       </div>
     );
   }
 
   renderPlayerBoard() {
     return (
-      <div>
-        <h3>My Ships</h3>
-        <Matrix 
-          data={this.props.playerBoard}
-          setStyle={this.getStyle}/>
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>My Ships</h3>
+          <i className="fa fa-desktop w3-margin-bottom w3-text-theme"></i>
+          <Matrix 
+            data={this.props.playerBoard}
+            setStyle={this.getStyle}/>
+        </div>
       </div>
     );
   }
 
   render() {
     return (
-      <div className='playing'>
-        <h2>Playing</h2>
+      <div className="w3-center">
+        <header className="w3-container w3-blue-grey">
+          <h2>Playing</h2>
+        </header>
         {this.renderPlayerBoard()}
         {this.renderBotBoard()}
         {this.renderEvents()}

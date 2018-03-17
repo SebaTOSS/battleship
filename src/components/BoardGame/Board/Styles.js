@@ -13,4 +13,5 @@ export const columnStyle = {
 
 export const matrixStyle = {
   display: 'flex',
+  marginLeft: '33%',
 };

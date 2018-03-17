@@ -2,9 +2,13 @@ import React from 'react';
 
 const Header = (props) => {
   return (
-    <div>
-      <h2>Header</h2>
-    </div>
+    <header className="w3-container w3-theme w3-padding" id="myHeader">
+      <i className="fa fa-bars w3-xlarge w3-button w3-theme"></i> 
+      <div className="w3-center">
+      <h4>BATTABLESHIP ARZION TEST</h4>
+      <h1 className="w3-xxxlarge w3-animate-bottom">MADE WE IT IN A FEW HOURS</h1>
+      </div>
+    </header>
   )
 }
 

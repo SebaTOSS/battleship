@@ -15,10 +15,10 @@ class EndGame extends React.Component {
   render() {
     const result = this.props.result;
     return (
-      <div>
+      <div className='w3-center'>
         <h2>Game over</h2>
         <h3>{result}</h3>
-        <button onClick={this.restart}>Restart</button>
+        <button onClick={this.restart} className='w3-button w3-theme'>Restart</button>
       </div>
     )
   }

@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import BoardGame from './components/BoardGame/BoardGame';
 import Battleship from './components/Battleship/Game';
 import './css/style.css';
+import './css/w3.css';
+import './css/w3-theme-red.css'
 
 ReactDOM.render(
   <div>
