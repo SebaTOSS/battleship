@@ -1,6 +1,6 @@
 import { canonicalData } from './Util';
 import Ship from './Ship';
-import { createAlphaGo, createRandom } from './Bots';
+import { buildBot } from './Bots';
 
 function createBoard() {
   return canonicalData(10, 10);
@@ -16,27 +16,6 @@ function buildShips() {
   }
   ships.push(new Ship(4));
   return ships;
-}
-
-function buildBot(type) {
-  let bot;
-  switch (type) {
-    case '1':
-      bot = createAlphaGo();
-      break;
-    case '2':
-      bot = createRandom();
-      break;
-    default:
-      bot = createRandom();
-      break;
-  }
-  const ship = new Ship(3);
-  ship.setStartCoordinate({x:0, y:0}, false);
-  bot.ships = [];
-  bot.ships.push(ship);
-  bot.board = canonicalData(10, 10);
-  return bot;
 }
 
 function wonPlayer(ships) {

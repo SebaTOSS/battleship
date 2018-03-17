@@ -1,7 +1,18 @@
 import Ship from './Ship';
 import { canonicalData, linearCanonicalCoordinates } from './Util';
 
-export function createAlphaGo() {
+function createCanonical() {
+  return {
+    name: 'DeepBlue',
+    cells: linearCanonicalCoordinates(10, 10),
+    getCoordinateForShoot: function() {
+      const coordinate = this.cells.shift();
+      return coordinate;
+    }
+  };
+}
+
+function createReverse() {
   return {
     name: 'DeepBlue',
     cells: linearCanonicalCoordinates(10, 10),
@@ -12,7 +23,7 @@ export function createAlphaGo() {
   };
 }
 
-export function createRandom() {
+function createRandom() {
   return {
     name: 'Random',
     getCoordinateForShoot: function(board) {
@@ -28,9 +39,12 @@ export function buildBot(type) {
   let bot;
   switch (type) {
     case '1':
-      bot = createAlphaGo();
+      bot = createCanonical();
       break;
     case '2':
+      bot = createReverse();
+      break;
+    case '3':
       bot = createRandom();
       break;
     default:
