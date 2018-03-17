@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
 import Matrix from './board/Matrix';
-import { canonicalData } from './Util';
 
 class SetUp extends React.Component {
   constructor() {
@@ -25,7 +24,6 @@ class SetUp extends React.Component {
   }
 
   render() {
-    const matrix = canonicalData(10, 10);
     return (
       <div>
         <h2>Set up game</h2>
@@ -47,7 +45,7 @@ class SetUp extends React.Component {
             </select>
           </p>
           <Matrix 
-            data={matrix}
+            data={this.props.playerBoard}
             setStyle={this.getStyle}
             onClick={this.props.placeShip}/>
           <button type='submit'>Start game!</button>

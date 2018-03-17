@@ -1,38 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import SetUp from './SetUp';
 import Game from './Game';
 import EndGame from './EndGame';
 import { buildBot } from '../Bots';
-import Ship from '../Ship';
-import { canonicalData } from './Util';
-
-const renderMergedProps = (component, ...rest) => {
-  const finalProps = Object.assign({}, ...rest);
-  return (
-    React.createElement(component, finalProps)
-  );
-}
-
-const PropsRoute = ({ component, ...rest }) => {
-  return (
-    <Route {...rest} render={routeProps => {
-      return renderMergedProps(component, routeProps, rest);
-    }}/>
-  );
-}
-
-const buildShips = function buildShips() {
-  const ships = [];
-  let ship;
-  ships.push(new Ship(2));
-  for (let index = 0; index < 3; index++) {
-    ship = new Ship(3);
-    ships.push(ship);
-  }
-  ships.push(new Ship(4));
-  return ships;
-}
+import { canonicalData, PropsRoute, buildShips } from './Util';
 
 const getAfloatShip = function getAfloatShip(collection) {
   return collection.find(
@@ -82,7 +54,8 @@ class BattleShip extends React.Component {
         board: []
       },
       result: 'WON',
-      gameOver: false
+      gameOver: false,
+      gameRunning: false
     });
   }
 
@@ -102,12 +75,14 @@ class BattleShip extends React.Component {
     this.setState({isHorizontal: !isHorizontal});
   }
 
-  placeShip(coordinate, cell) {
+  placeShip(cellData) {
     const ship = this.state.ships.pop();
     if (ship) {
-      ship.setStartCoordinate(coordinate, this.props.isHorizontal);
-      this.state.player.ships.push(ship);
-      cell.setBackgroundColor("black");
+      ship.setStartCoordinate(cellData, this.props.isHorizontal);
+      const player = {...this.state.player}
+      player.ships.push(ship);
+      cellData.className = 'ship';
+      this.setState({player});
     }
   }
 
@@ -125,22 +100,25 @@ class BattleShip extends React.Component {
     }
   }
 
-  computeShoot(ship, coordinate, playerName) {
+  computeShoot(ship, cellData, playerName) {
     let event = {
       timestamp: Date.now()
     };
     if (ship) {
-      ship.hit(coordinate);
+      ship.hit(cellData);
       if (ship.isSunk()) {
         event.message = `${playerName} - SHIP DESTROYED!`;
         event.class = 'destroy';
+        cellData.className = 'ship-destroy';
       } else {
         event.message = `${playerName} - HIT!`;
         event.class = 'hit';
+        cellData.className = 'ship-hit';
       }
     } else {
       event.message = `${playerName} - MISSED!`;
       event.class = 'missed';
+      cellData.className = 'ship-missed';
     }
     console.log(event);
     const events = this.state.events.slice();
@@ -150,10 +128,17 @@ class BattleShip extends React.Component {
 
   botShoots() {
     const coordinate = this.state.bot.getCoordinateForShoot();
-    console.log(coordinate);
     const ship = findShip(this.state.player.ships, coordinate);
     const botName = this.state.bot.name;
-    this.computeShoot(ship, coordinate, botName);
+    const flatBoard = this.state.player.board.reduce(
+      (accumulator, currentValue) => {
+        return accumulator.concat(currentValue);
+      }, []);
+    const cellData = flatBoard.find((cell) => {
+        return cell.x === coordinate.x &&
+              cell.y === coordinate.y;
+      });
+    this.computeShoot(ship, cellData, botName);
     const afloatShip = getAfloatShip(this.state.bot.ships);
     if (!afloatShip) {
       const result = 'LOST';
@@ -162,11 +147,11 @@ class BattleShip extends React.Component {
     }
   }
 
-  playerShoots(coordinate) {
+  playerShoots(cellData) {
     if (!this.state.gameOver) {
-      const ship = findShip(this.state.bot.ships, coordinate);
+      const ship = findShip(this.state.bot.ships, cellData);
       const playerName = this.state.player.name;
-      this.computeShoot(ship, coordinate, playerName);
+      this.computeShoot(ship, cellData, playerName);
       this.nextTurn();
     }
   }
@@ -186,7 +171,8 @@ class BattleShip extends React.Component {
             setPlayerName={this.setPlayerName}
             changeDirection={this.changeDirection}
             placeShip={this.placeShip}
-            setBot={this.setBot}/>
+            setBot={this.setBot}
+            playerBoard={this.state.player.board}/>
           <PropsRoute
             path='/game'
             component={Game}

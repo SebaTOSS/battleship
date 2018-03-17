@@ -7,6 +7,10 @@ class Game extends React.Component {
     super();
     this.surrender = this.surrender.bind(this);
     this.gameOver = this.gameOver.bind(this);
+    this.renderPlayerBoard = this.renderPlayerBoard.bind(this);
+    this.renderBotBoard = this.renderBotBoard.bind(this);
+    this.renderEvents = this.renderEvents.bind(this);
+    this.renderButtons = this.renderButtons.bind(this);
   }
 
   surrender(event) {
@@ -27,49 +31,74 @@ class Game extends React.Component {
 
   renderEvent(event) {
     return (
-      <li key={event.timestamp} className={event.class}>
+      <li key={event.timestamp}
+          className={event.class}>
         {event.message}
       </li>
     )
   }
 
-  render() {
+  renderButtons() {
+    return (
+      <div className='buttons-container'>
+        <p>
+          <button
+            onClick={this.surrender}
+            disabled={this.props.gameOver}>
+            Surrender
+          </button>
+          <button
+            onClick={this.gameOver}
+            disabled={!this.props.gameOver}>
+            Game Over
+          </button>
+        </p>
+      </div>
+    );
+  }
+
+  renderEvents() {
     return (
       <div>
+        <h3>Shoots</h3>
+        <ul>
+          {this.props.events.map(this.renderEvent)}
+        </ul>
+      </div>
+    );
+  }
+
+  renderBotBoard() {
+    return (
+      <div>
+        <h3>Enemy Ships</h3>
+        <Matrix 
+          data={this.props.botBoard}
+          setStyle={this.getStyle}
+          onClick={this.props.playerShoots}/>
+      </div>
+    );
+  }
+
+  renderPlayerBoard() {
+    return (
+      <div>
+        <h3>My Ships</h3>
+        <Matrix 
+          data={this.props.playerBoard}
+          setStyle={this.getStyle}/>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div className='game'>
         <h2>Game running</h2>
-        <div>
-          <h3>My Ships</h3>
-          <Matrix 
-            data={this.props.playerBoard}
-            setStyle={this.getStyle}/>
-        </div>
-        <div>
-          <h3>Enemy Ships</h3>
-          <Matrix 
-            data={this.props.botBoard}
-            setStyle={this.getStyle}
-            onClick={this.props.playerShoots}/>
-        </div>
-        <div>
-          <h3>Shoots</h3>
-          <ul>
-            {this.props.events.map(this.renderEvent)}
-          </ul>
-        </div>
-        <div>
-          <p>
-            <button
-              onClick={this.surrender}
-              disabled={this.props.gameOver}>
-              Surrender
-            </button>
-            <button
-              onClick={this.gameOver}
-              disabled={!this.props.gameOver}>
-              Game Over
-            </button>
-          </p>
-        </div>
+        {this.renderPlayerBoard()}
+        {this.renderBotBoard()}
+        {this.renderEvents()}
+        {this.renderButtons()}
       </div>
     )
   }

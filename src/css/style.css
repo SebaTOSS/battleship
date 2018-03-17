@@ -7,6 +7,18 @@
 .missed {
   color: lightblue;
 }
+.ship {
+  background-color: black !important;
+}
+.ship-hit {
+  background-color: red !important;
+}
+.ship-destroy {
+  background-color: orange !important;
+}
+.ship-missed {
+  background-color: lightblue !important;
+}
 .order-enter {
   -webkit-transform: translateX(-120%);
           transform: translateX(-120%);
