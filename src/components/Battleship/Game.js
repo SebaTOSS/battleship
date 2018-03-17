@@ -6,15 +6,15 @@ function createBoard() {
   return canonicalData(10, 10);
 }
 
-function buildShips() {
+function buildShips(board) {
   const ships = [];
   let ship;
-  ships.push(new Ship(2));
+  ships.push(new Ship(2, board));
   for (let index = 0; index < 3; index++) {
-    ship = new Ship(3);
+    ship = new Ship(3, board);
     ships.push(ship);
   }
-  ships.push(new Ship(4));
+  ships.push(new Ship(4, board));
   return ships;
 }
 
@@ -55,6 +55,9 @@ function computeShoot(ship, cell, playerName) {
     if (ship.isSunk()) {
       event.message = `${playerName} - SHIP DESTROYED!`;
       event.class = 'ship-destroy';
+      ship.coordinates.forEach((coordinate) => {
+        coordinate.className = 'ship-destroy';
+      });
     } else {
       event.message = `${playerName} - HIT!`;
       event.class = 'ship-hit';
@@ -93,7 +96,7 @@ const findShip = function findShip(collection, coordinate) {
 export default class Battleship {
   constructor() {
     const board = createBoard();
-    this.ships = buildShips();
+    this.ships = buildShips(board);
     this.events = [];
     this.player = {
       name: '',
@@ -125,9 +128,11 @@ export default class Battleship {
     const ship = this.ships.pop();
     if (ship) {
       ship.setStartCoordinate(cell, direction);
+      ship.coordinates.forEach((coordinate)=> {
+        coordinate.className = 'ship';
+      });
       const player = {...this.player}
       player.ships.push(ship);
-      cell.className = 'ship';
     }
   }
 

@@ -3,7 +3,7 @@ import { canonicalData, linearCanonicalCoordinates } from './Util';
 
 function createCanonical() {
   return {
-    name: 'DeepBlue',
+    name: 'Canonical',
     cells: linearCanonicalCoordinates(10, 10),
     getCoordinateForShoot: function() {
       const coordinate = this.cells.shift();
@@ -14,7 +14,7 @@ function createCanonical() {
 
 function createReverse() {
   return {
-    name: 'DeepBlue',
+    name: 'Reverse',
     cells: linearCanonicalCoordinates(10, 10),
     getCoordinateForShoot: function() {
       const coordinate = this.cells.pop();
@@ -51,10 +51,10 @@ export function buildBot(type) {
       bot = createRandom();
       break;
   }
-  const ship = new Ship(3);
-  ship.setStartCoordinate({x:0, y:0}, false);
-  bot.ships = [];
-  bot.ships.push(ship);
   bot.board = canonicalData(10, 10);
+  bot.ships = [];
+  const ship = new Ship(3, bot.board);
+  ship.setStartCoordinate({x:0, y:0}, false);
+  bot.ships.push(ship);
   return bot;
 }
