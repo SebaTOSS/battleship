@@ -17,13 +17,20 @@ class EndGame extends React.Component {
     const result = this.props.result;
     const image = (result === 'WON')? 'WON': 'LOST';
     const path = require(`../../css/images/${image}.jpg`)
+    const style = {
+      'height':'20%',
+      'marginTop': '20px'
+    };
     return (
       <BackgroundImage 
         src={path}
         placeholder={path}
         className='background-image' >
         <div className='w3-center expanded'>
-          <h2>Game Over</h2>
+          <img 
+            src={require('../../css/images/game-over.png')}
+            alt='Game Over'
+            style={style} />
           <h3>{result}</h3>
           <button 
             className='w3-button w3-theme'

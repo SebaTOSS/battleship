@@ -48,9 +48,9 @@ class SetUp extends React.Component {
               <div className="w3-card w3-container">
                 <h3>Battleship Deploy</h3>
                 <p>Click on map to put your ships in this order</p>
-                <p>1 ships of 4 spaces </p>
-                <p>3 ships of 3 spaces </p>
-                <p>1 ships of 2 spaces </p>
+                <p>1 ships of 4 spaces</p>
+                <p>3 ships of 3 spaces</p>
+                <p>1 ships of 2 spaces</p>
                 <p>Use selection for position</p>
                 <select ref={(input) => this.direction = input}
                   value={this.props.direction} 
