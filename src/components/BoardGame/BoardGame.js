@@ -15,6 +15,7 @@ class BoardGame extends React.Component {
     this.setBot = this.setBot.bind(this);
     this.setInitialState = this.setInitialState.bind(this);
     this.updateEvents = this.updateEvents.bind(this);
+    this.changeDirection = this.changeDirection.bind(this);
   }
   
   componentWillMount() {
@@ -30,8 +31,8 @@ class BoardGame extends React.Component {
   }
   
   changeDirection() {
-    let isHorizontal = {...this.state.isHorizontal};
-    this.setState({isHorizontal: !isHorizontal});
+    let isHorizontal = !this.state.isHorizontal;
+    this.setState({isHorizontal});
   }
 
   setBot(number) {
@@ -48,7 +49,7 @@ class BoardGame extends React.Component {
 
   placePiece(cell) {
     const game = Object.assign(this.state.game);
-    game.placePiece(cell);
+    game.placePiece(cell, this.state.isHorizontal);
     this.setState({game});
   }
 
@@ -89,6 +90,7 @@ class BoardGame extends React.Component {
             exact path='/'
             component={SetUp}
             setPlayerName={this.setPlayerName}
+            direction={this.props.isHorizontal}
             changeDirection={this.changeDirection}
             placePiece={this.placePiece}
             setBot={this.setBot}

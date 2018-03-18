@@ -52,7 +52,9 @@ class SetUp extends React.Component {
                 <p>3 ships of 3 spaces </p>
                 <p>1 ships of 2 spaces </p>
                 <p>Use selection for position</p>
-                <select ref={(input) => this.direction = input}>
+                <select ref={(input) => this.direction = input}
+                  value={this.props.direction} 
+                  onChange={this.props.changeDirection}>
                   <option value='true'>Horizontal</option>
                   <option value='false'>Vertical</option>
                 </select>
