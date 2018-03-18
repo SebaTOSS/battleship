@@ -6,7 +6,7 @@ export function canonicalData(col, row) {
       column.push({
         x: i,
         y: j,
-        className: 'test'
+        className: ''
       });
     }
     data.push(column);

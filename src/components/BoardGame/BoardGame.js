@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { PropsRoute } from './Util';
 import SetUp from './SetUp';
@@ -47,17 +48,28 @@ class BoardGame extends React.Component {
     this.setState({game});
   }
 
+  updateEvents() {
+    const events = this.state.game.events.slice();
+    this.setState({events});
+  }
+
+  /**
+   * Hotspot for BoardGame.
+   * Calls to game instance with cell object and refresh the game
+   * @param {object} cell 
+   */
   placePiece(cell) {
     const game = Object.assign(this.state.game);
     game.placePiece(cell, this.state.isHorizontal);
     this.setState({game});
   }
 
-  updateEvents() {
-    const events = this.state.game.events.slice();
-    this.setState({events});
-  }
-
+  /**
+   * Hotspot for BoardGame.
+   * Executes player play calling the instance game.
+   * If game is not over, calls game to execute bot play.
+   * @param {object} cell 
+   */
   playsPlayer(cell) {
     if (!this.state.game.isGameOver) {
       this.state.game.playsPlayer(cell);
@@ -76,6 +88,10 @@ class BoardGame extends React.Component {
     }
   }
 
+  /**
+   * Hotspot for BoardGame.
+   * Ends game with player lost.
+   */
   surrender() {
     const game = Object.assign(this.state.game);
     game.surrender();
@@ -114,5 +130,9 @@ class BoardGame extends React.Component {
     )
   }
 }
+
+BoardGame.propTypes = {
+  game: PropTypes.object,
+};
 
 export default BoardGame;

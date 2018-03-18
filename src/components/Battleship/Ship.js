@@ -10,6 +10,11 @@ export default class Ship {
       }, []);
   }
 
+  /**
+   * Adds a cell to ships coordinates
+   * @param {object} coordinate to add
+   * @param {object} flatBoard where to look
+   */
   addCoordinate(coordinate, flatBoard) {
     const cell = flatBoard.find((cell) => {
       return cell.x === coordinate.x &&
@@ -20,6 +25,11 @@ export default class Ship {
     }
   }
 
+  /**
+   * Sets coordinate to ship.
+   * @param {*} coordinate 
+   * @param {*} isHorizontal 
+   */
   setStartCoordinate(coordinate, isHorizontal) {
     this.startCoordinate = coordinate;
     this.addCoordinate(coordinate, this.flatBoard);
@@ -39,6 +49,10 @@ export default class Ship {
     }
   }
 
+  /**
+   * Checks if ship is the coordinate
+   * @param {object} coordinate 
+   */
   isInCoordinate(coordinate) {
     const exists = this.coordinates.find((shipCoordinate) => {
      return shipCoordinate.x === coordinate.x &&
@@ -47,6 +61,10 @@ export default class Ship {
     return !!exists;
   }
 
+  /**
+   * Process a hit to ship in the coordinate
+   * @param {object} coordinate 
+   */
   hit(coordinate) {
     const target = this.coordinates.find((shipCoordinate) => {
       return  shipCoordinate.x === coordinate.x &&
@@ -58,6 +76,10 @@ export default class Ship {
     }
   }
 
+  /**
+   * Returns if ship is sunk or not
+   * @returns boolean
+   */
   isSunk() {
     return this.size <= this.hits;
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import BackgroundImage from 'react-background-image-loader';
 
 class EndGame extends React.Component {
@@ -42,5 +43,10 @@ class EndGame extends React.Component {
     )
   }
 }
+
+EndGame.propTypes = {
+  result: PropTypes.string,
+  setInitialState: PropTypes.func,
+};
 
 export default withRouter(EndGame);

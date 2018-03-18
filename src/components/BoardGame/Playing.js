@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom'
 import Matrix from './Board/Matrix';
 
@@ -29,10 +30,51 @@ class Playing extends React.Component {
     }
   }
 
+  renderPlayerBoard() {
+    return (
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>My Ships</h3>
+          <Matrix 
+            data={this.props.playerBoard}
+            setStyle={this.getStyle}/>
+        </div>
+      </div>
+    );
+  }
+
+  renderBotBoard() {
+    return (
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>Enemy Ships</h3>
+          <Matrix 
+            data={this.props.botBoard}
+            setStyle={this.getStyle}
+            onClick={this.props.playsPlayer}/>
+        </div>
+      </div>
+    );
+  }
+
+  renderEvents() {
+    return (
+      <div className="w3-third">
+        <div className='w3-card w3-container'>
+          <h3>Shoots</h3>
+          <ul className='w3-ul w3-margin-bottom'>
+            {this.props.events.map(this.renderEvent)}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   renderEvent(event) {
     return (
-      <li key={event.timestamp}
-          className={ 'event ' + event.class}>
+      <li
+        key={event.timestamp}
+        className={ 'event ' + event.class}>
         {event.message}
       </li>
     )
@@ -59,47 +101,6 @@ class Playing extends React.Component {
     );
   }
 
-  renderEvents() {
-    return (
-      <div className="w3-third">
-        <div className='w3-card w3-container'>
-          <h3>Shoots</h3>
-          <ul className='w3-ul w3-margin-bottom'>
-            {this.props.events.map(this.renderEvent)}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-  renderBotBoard() {
-    return (
-      <div className="w3-third">
-        <div className='w3-card w3-container'>
-          <h3>Enemy Ships</h3>
-          <Matrix 
-            data={this.props.botBoard}
-            setStyle={this.getStyle}
-            onClick={this.props.playsPlayer}/>
-        </div>
-      </div>
-    );
-  }
-
-  renderPlayerBoard() {
-    return (
-      <div className="w3-third">
-        <div className='w3-card w3-container'>
-          <h3>My Ships</h3>
-          <i className="fa fa-desktop w3-margin-bottom w3-text-theme"></i>
-          <Matrix 
-            data={this.props.playerBoard}
-            setStyle={this.getStyle}/>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     return (
       <div className="w3-center">
@@ -114,5 +115,14 @@ class Playing extends React.Component {
     )
   }
 }
+
+Playing.propTypes = {
+  isGameOver: PropTypes.bool,
+  events: PropTypes.array,
+  playerBoard: PropTypes.array,
+  botBoard: PropTypes.array,
+  surrender: PropTypes.func,
+  playsPlayer: PropTypes.func,
+};
 
 export default withRouter(Playing);
