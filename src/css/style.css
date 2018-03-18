@@ -16,3 +16,10 @@
 .event {
   color: black !important;
 }
+.expanded {
+  height: 500px;
+}
+.background-image {
+  background-repeat: no-repeat;
+  background-position: center;
+}

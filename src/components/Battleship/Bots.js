@@ -53,8 +53,23 @@ export function buildBot(type) {
   }
   bot.board = canonicalData(10, 10);
   bot.ships = [];
-  const ship = new Ship(3, bot.board);
+  let ship = new Ship(4, bot.board);
+  ship.setStartCoordinate({x:9, y:0}, true);
+  bot.ships.push(ship);
+  ship = new Ship(3, bot.board);
   ship.setStartCoordinate({x:0, y:0}, false);
+  bot.ships.push(ship);
+  ship = new Ship(3, bot.board);
+  ship.setStartCoordinate({x:3, y:3}, false);
+  bot.ships.push(ship);
+  ship = new Ship(3, bot.board);
+  ship.setStartCoordinate({x:7, y:0}, false);
+  bot.ships.push(ship);
+  ship = new Ship(2, bot.board);
+  ship.setStartCoordinate({x:6, y:2}, true);
+  bot.ships.push(ship);
+  ship = new Ship(2, bot.board);
+  ship.setStartCoordinate({x:5, y:7}, true);
   bot.ships.push(ship);
   return bot;
 }

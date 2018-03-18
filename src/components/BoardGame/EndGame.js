@@ -1,5 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import BackgroundImage from 'react-background-image-loader';
 
 class EndGame extends React.Component {
   constructor() {
@@ -14,21 +15,23 @@ class EndGame extends React.Component {
 
   render() {
     const result = this.props.result;
-    const background = (result === 'WON')? '/css/images/won.jpg' : '/css/images/defeat.jpg';
-    const style = {
-      backgroundImage: `url(${background})`,
-    };
+    const image = (result === 'WON')? 'WON': 'LOST';
+    const path = require(`../../css/images/${image}.jpg`)
     return (
-      <div className='w3-center'
-        style= {style}>
-        <h2>Game over</h2>
-        <h3>{result}</h3>
-        <button 
-          className='w3-button w3-theme'
-          onClick={this.restart}>
-          Restart
-        </button>
-      </div>
+      <BackgroundImage 
+        src={path}
+        placeholder={path}
+        className='background-image' >
+        <div className='w3-center expanded'>
+          <h2>Game Over</h2>
+          <h3>{result}</h3>
+          <button 
+            className='w3-button w3-theme'
+            onClick={this.restart}>
+            Restart
+          </button>
+        </div>
+      </BackgroundImage>
     )
   }
 }
